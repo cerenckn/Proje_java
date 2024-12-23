@@ -9,6 +9,8 @@ public class KayıtOlEkranı extends JFrame {
         frame.setSize(524, 438);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
+        frame.setLocationRelativeTo(null);
+        
 
         // Kullanıcı Adı Label ve Field
         JLabel userLabel = new JLabel("Kullanıcı Adı:");

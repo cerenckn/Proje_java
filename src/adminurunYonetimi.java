@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
@@ -11,59 +12,84 @@ public class adminurunYonetimi extends JFrame {
     private int selectedRowId = -1;
 
     public adminurunYonetimi() {
-        // Pencere Başlığı ve Boyut
         setTitle("Ürün Yönetimi Ekranı");
-        setSize(600, 400);
+        setSize(900, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(null);
+        setLayout(new BorderLayout());
 
-        // Bağlantı Kur
+        // Bağlantı kur
         baglantiKur();
 
-        // GUI Öğeleri
+        // Tema ve Renkler
+        getContentPane().setBackground(new Color(240, 240, 250));
+        UIManager.put("Button.background", new Color(170, 205, 250));
+        UIManager.put("Button.foreground", Color.DARK_GRAY);
+        UIManager.put("Panel.background", new Color(220, 230, 250));
+        UIManager.put("Label.foreground", Color.DARK_GRAY);
+        UIManager.put("Table.background", new Color(240, 240, 250));
+        UIManager.put("Table.foreground", Color.DARK_GRAY);
+        UIManager.put("Table.gridColor", new Color(200, 200, 230));
+        UIManager.put("TableHeader.background", new Color(170, 205, 250));
+        UIManager.put("TableHeader.foreground", Color.DARK_GRAY);
+
+        // Üst Panel (Form Alanı)
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(170, 205, 250)), "Ürün Bilgileri", 0, 0, new Font("Arial", Font.BOLD, 14), Color.DARK_GRAY));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         JLabel lblUrunAdi = new JLabel("Ürün Adı:");
-        lblUrunAdi.setBounds(20, 20, 100, 25);
-        add(lblUrunAdi);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        formPanel.add(lblUrunAdi, gbc);
 
         txtUrunAdi = new JTextField();
-        txtUrunAdi.setBounds(120, 20, 150, 25);
-        add(txtUrunAdi);
+        gbc.gridx = 1;
+        formPanel.add(txtUrunAdi, gbc);
 
         JLabel lblFiyat = new JLabel("Fiyat:");
-        lblFiyat.setBounds(20, 60, 100, 25);
-        add(lblFiyat);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        formPanel.add(lblFiyat, gbc);
 
         txtFiyat = new JTextField();
-        txtFiyat.setBounds(120, 60, 150, 25);
-        add(txtFiyat);
+        gbc.gridx = 1;
+        formPanel.add(txtFiyat, gbc);
 
         JLabel lblStok = new JLabel("Stok Miktarı:");
-        lblStok.setBounds(20, 100, 100, 25);
-        add(lblStok);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        formPanel.add(lblStok, gbc);
 
         txtStok = new JTextField();
-        txtStok.setBounds(120, 100, 150, 25);
-        add(txtStok);
+        gbc.gridx = 1;
+        formPanel.add(txtStok, gbc);
 
         JButton btnEkle = new JButton("Yeni Ürün Ekle");
-        btnEkle.setBounds(20, 150, 120, 25);
-        add(btnEkle);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        formPanel.add(btnEkle, gbc);
 
         JButton btnGuncelle = new JButton("Ürünü Düzenle");
-        btnGuncelle.setBounds(150, 150, 120, 25);
-        add(btnGuncelle);
+        gbc.gridx = 1;
+        formPanel.add(btnGuncelle, gbc);
 
         JButton btnSil = new JButton("Ürünü Sil");
-        btnSil.setBounds(280, 150, 120, 25);
-        add(btnSil);
+        gbc.gridx = 2;
+        formPanel.add(btnSil, gbc);
 
-        // JTable ve Model
+        add(formPanel, BorderLayout.NORTH);
+
+        // Alt Panel (Tablo)
         model = new DefaultTableModel(new String[]{"ID", "Ürün Adı", "Fiyat", "Stok"}, 0);
         table = new JTable(model);
+        table.setRowHeight(30);
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
         JScrollPane sp = new JScrollPane(table);
-        sp.setBounds(20, 200, 540, 150);
-        add(sp);
+        sp.setBorder(BorderFactory.createLineBorder(new Color(170, 205, 250)));
+        add(sp, BorderLayout.CENTER);
 
         // Buton Olayları
         btnEkle.addActionListener(e -> urunEkle());
@@ -71,7 +97,7 @@ public class adminurunYonetimi extends JFrame {
         btnSil.addActionListener(e -> urunSil());
 
         table.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) { 
+            public void mouseClicked(MouseEvent e) {
                 int row = table.getSelectedRow();
                 selectedRowId = (int) table.getValueAt(row, 0);
                 txtUrunAdi.setText(table.getValueAt(row, 1).toString());
@@ -86,26 +112,25 @@ public class adminurunYonetimi extends JFrame {
     private void baglantiKur() {
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost/user_management", "root", "*Crn123.*");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Veritabanı Bağlantı Hatası!");
+            JOptionPane.showMessageDialog(this, "Veritabanı Bağlantı Hatası: " + e.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void urunEkle() {
         try {
-            String sql = "INSERT INTO urunlist (urun_adi, fiyat, stok) VALUES (?, ?, ?)";
-            PreparedStatement pst = conn.prepareStatement(sql);
-
-            String urunAdi = txtUrunAdi.getText();
-            double fiyat = Double.parseDouble(txtFiyat.getText());
-            int stok = Integer.parseInt(txtStok.getText());
+            String urunAdi = txtUrunAdi.getText().trim();
+            double fiyat = Double.parseDouble(txtFiyat.getText().trim());
+            int stok = Integer.parseInt(txtStok.getText().trim());
 
             if (urunAdi.isEmpty() || fiyat <= 0 || stok < 0) {
                 JOptionPane.showMessageDialog(this, "Lütfen geçerli bilgileri girin!", "Hata", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
+            String sql = "INSERT INTO urunlist (urun_adi, fiyat, stok) VALUES (?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, urunAdi);
             pst.setDouble(2, fiyat);
             pst.setInt(3, stok);
@@ -116,15 +141,11 @@ public class adminurunYonetimi extends JFrame {
             temizle();
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Lütfen fiyat ve stok için geçerli sayılar girin!", "Hata", JOptionPane.ERROR_MESSAGE);
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "SQL Hatası: " + e.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
         }
-
-        
-
     }
-
 
     private void urunGuncelle() {
         if (selectedRowId == -1) {
@@ -133,13 +154,12 @@ public class adminurunYonetimi extends JFrame {
         }
 
         try {
+            String urunAdi = txtUrunAdi.getText().trim();
+            double fiyat = Double.parseDouble(txtFiyat.getText().trim());
+            int stok = Integer.parseInt(txtStok.getText().trim());
+
             String sql = "UPDATE urunlist SET urun_adi = ?, fiyat = ?, stok = ? WHERE id = ?";
             PreparedStatement pst = conn.prepareStatement(sql);
-
-            String urunAdi = txtUrunAdi.getText();
-            double fiyat = Double.parseDouble(txtFiyat.getText());
-            int stok = Integer.parseInt(txtStok.getText());
-
             pst.setString(1, urunAdi);
             pst.setDouble(2, fiyat);
             pst.setInt(3, stok);
@@ -155,20 +175,26 @@ public class adminurunYonetimi extends JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "SQL Hatası: " + e.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
- 
     private void urunSil() {
+        if (selectedRowId == -1) {
+            JOptionPane.showMessageDialog(this, "Lütfen silmek için bir ürün seçin!", "Uyarı", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         try {
             String sql = "DELETE FROM urunlist WHERE id = ?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, selectedRowId);
             pst.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Ürün başarıyla silindi!");
             urunleriListele();
             temizle();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "SQL Hatası: " + e.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -180,8 +206,9 @@ public class adminurunYonetimi extends JFrame {
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getInt("id"), rs.getString("urun_adi"), rs.getDouble("fiyat"), rs.getInt("stok")});
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Veritabanı Hatası: " + e.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -196,4 +223,3 @@ public class adminurunYonetimi extends JFrame {
         SwingUtilities.invokeLater(() -> new adminurunYonetimi().setVisible(true));
     }
 }
-

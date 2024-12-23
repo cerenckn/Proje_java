@@ -32,5 +32,9 @@ public class DatabaseConnection {
         }
     }
 
+	public static Connection connect() {
+		return null;
+	}
+
 	
 }

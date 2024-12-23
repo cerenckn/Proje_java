@@ -1,127 +1,142 @@
-
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.*;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.SystemColor;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
+import javax.swing.border.EmptyBorder;
 
 public class LoginScreen {
-	private JTextField txtSistemeKaytlDeilseniz;
 
-    /**
-     * @wbp.parser.entryPoint
-     */
+    private JTextField txtRegisterPrompt;
+
     public LoginScreen() {
-        // Ana çerçeve oluşturma
-        JFrame frmEnvosale = new JFrame("Giriş Yap");
-        frmEnvosale.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\crnck\\Downloads\\WhatsApp Image 2024-12-18 at 14.55.57.jpeg"));
-        frmEnvosale.setTitle("E-INVOSALE");
-        frmEnvosale.getContentPane().setForeground(new Color(224, 255, 255));
-        frmEnvosale.setSize(512, 400);
-        frmEnvosale.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frmEnvosale.getContentPane().setLayout(null);
-        frmEnvosale.setLocationRelativeTo(null); 
+        // Setup frame
+        JFrame frame = new JFrame("Giriş Yap");
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png"));
+        frame.setSize(512, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null); 
+        frame.getContentPane().setLayout(null);
         
-        JLabel hello=new JLabel("UYGULAMAYA");
-        hello.setForeground(new Color(47, 79, 79));
-        hello.setBackground(new Color(0, 100, 0));
-        hello.setBounds(129, 37, 339, 48);
-        hello.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
-        hello.setHorizontalAlignment(SwingConstants.CENTER);
-        frmEnvosale.getContentPane().add(hello);
-        
-        // Kullanıcı adı etiketi ve alanı
-        JLabel userLabel = new JLabel("Kullanıcı Adı:");
-        userLabel.setBounds(20, 160, 120, 30);
-        userLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        frmEnvosale.getContentPane().add(userLabel);
+
+        setBackgroundImage(frame);
+        setLogo(frame);
+
+        setupUIComponents(frame);
+
+        frame.setVisible(true);
+    }
+
+    private void setupUIComponents(JFrame frame) {
+        // Welcome label
+        JLabel welcomeLabel = createLabel("E-INVOSALE", 129, 50, 339, 48, new Font("Arial", Font.BOLD, 24), new Color(47, 79, 79));
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        frame.getContentPane().add(welcomeLabel);
+
+        // Username field
+        JLabel userLabel = createLabel("Kullanıcı Adı:", 20, 160, 120, 30, new Font("Tahoma", Font.BOLD, 15), null);
+        frame.getContentPane().add(userLabel);
 
         JTextField userField = new JTextField();
         userField.setBounds(129, 163, 265, 30);
-        frmEnvosale.getContentPane().add(userField);
+        userField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        userField.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 250)));
+        frame.getContentPane().add(userField);
 
-        // Şifre etiketi ve alanı
-        JLabel passLabel = new JLabel("Şifre:");
-        passLabel.setBounds(20, 197, 120, 30);
-        passLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        frmEnvosale.getContentPane().add(passLabel);
+        // Password field
+        JLabel passLabel = createLabel("Şifre:", 20, 197, 120, 30, new Font("Tahoma", Font.BOLD, 15), null);
+        frame.getContentPane().add(passLabel);
 
         JPasswordField passField = new JPasswordField();
         passField.setBounds(129, 200, 265, 30);
-        frmEnvosale.getContentPane().add(passField);
+        passField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        passField.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 250)));
+        frame.getContentPane().add(passField);
 
-        // Giriş yap butonu
-        JButton loginButton = new JButton("Giriş Yap");
-        loginButton.setBounds(264, 235, 130, 30);
-        loginButton.setBackground(new Color(230, 230, 250));
-        loginButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-        frmEnvosale.getContentPane().add(loginButton);
+        // Login button
+        JButton loginButton = createButton("Giriş Yap", 264, 235, 130, 40, new Color(70, 130, 180), new Color(100, 149, 237));
+        loginButton.addActionListener(e -> handleLogin(userField, passField, frame));
+        frame.getContentPane().add(loginButton);
         
-        txtSistemeKaytlDeilseniz = new JTextField("Sisteme kayıtlı değilseniz kayıt olunuz.");
-        txtSistemeKaytlDeilseniz.setBackground(new Color(245, 245, 245));
-        txtSistemeKaytlDeilseniz.setBounds(129, 275, 265, 30);
-        txtSistemeKaytlDeilseniz.setEditable(false);
-        txtSistemeKaytlDeilseniz.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-        frmEnvosale.getContentPane().add(txtSistemeKaytlDeilseniz);
-        txtSistemeKaytlDeilseniz.setColumns(10);
+        // Register prompt text
+        txtRegisterPrompt = new JTextField("Sisteme kayıtlı değilseniz kayıt olunuz.");
+        txtRegisterPrompt.setBackground(new Color(245, 245, 245));
+        txtRegisterPrompt.setBounds(129, 275, 265, 30);
+        txtRegisterPrompt.setEditable(false);
+        txtRegisterPrompt.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        txtRegisterPrompt.setBorder(null);
+        frame.getContentPane().add(txtRegisterPrompt);
         
-        JButton registerbtn = new JButton("Kayıt Ol");
-        registerbtn.setBounds(264, 315, 130, 30);
-        registerbtn.setBackground(new Color(255, 182, 193));
-        registerbtn.setFont(new Font("Tahoma", Font.BOLD, 14));
-        registerbtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                KayıtOlEkranı kayıtOlEkranı = new KayıtOlEkranı();
-                kayıtOlEkranı.setVisible(true);
+        // Register button
+        JButton registerButton = createButton("Kayıt Ol", 264, 315, 130, 40, new Color(230, 182, 193), new Color(255, 105, 180));
+        registerButton.addActionListener(e -> openRegistrationScreen());
+        frame.getContentPane().add(registerButton);
+    }
+
+    private JLabel createLabel(String text, int x, int y, int width, int height, Font font, Color color) {
+        JLabel label = new JLabel(text);
+        label.setBounds(x, y, width, height);
+        if (font != null) label.setFont(font);
+        if (color != null) label.setForeground(color);
+        return label;
+    }
+
+    private JButton createButton(String text, int x, int y, int width, int height, Color bgColor, Color hoverColor) {
+        JButton button = new JButton(text);
+        button.setBounds(x, y, width, height);
+        button.setFont(new Font("Tahoma", Font.BOLD, 14));
+        button.setBackground(bgColor);
+        button.setForeground(Color.WHITE);
+        button.setBorder(BorderFactory.createEmptyBorder());
+        
+        // Hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(hoverColor);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(bgColor);
             }
         });
-        frmEnvosale.getContentPane().add(registerbtn);
         
-        JLabel lblHogeldiniz = new JLabel("HOŞGELDİNİZ");
-        lblHogeldiniz.setForeground(new Color(47, 79, 79));
-        lblHogeldiniz.setBackground(new Color(255, 128, 192));
-        lblHogeldiniz.setHorizontalAlignment(SwingConstants.CENTER);
-        lblHogeldiniz.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
-        lblHogeldiniz.setBounds(183, 61, 339, 48);
-        frmEnvosale.getContentPane().add(lblHogeldiniz);
-        
-        JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setIcon(new ImageIcon("C:\\Users\\crnck\\Downloads\\Free (6).png"));
-        lblNewLabel.setBounds(0, 0, 540, 442);
-        frmEnvosale.getContentPane().add(lblNewLabel);
-        
+        return button;
+    }
 
-        // Giriş butonu tıklama işlemi
-        loginButton.addActionListener(e -> {
-            String username = userField.getText();
-            String password = new String(passField.getPassword());
-                if (username.isEmpty() || password.isEmpty()) {
-                showNotification("Kullanıcı adı ve şifre boş bırakılamaz!", "Hata", JOptionPane.ERROR_MESSAGE);
-                return;
+    private void setBackgroundImage(JFrame frame) {
+        JLabel backgroundLabel = new JLabel("");
+        backgroundLabel.setIcon(new ImageIcon(""));
+        backgroundLabel.setBounds(0, 0, 540, 442);
+        frame.getContentPane().add(backgroundLabel);
+    }
+
+    private void setLogo(JFrame frame) {
+        JLabel logoLabel = new JLabel(new ImageIcon("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png"));
+        logoLabel.setBounds(20,20, 150, 100);
+        frame.getContentPane().add(logoLabel);
+    }
+
+    private void handleLogin(JTextField userField, JPasswordField passField, JFrame frame) {
+        String username = userField.getText();
+        String password = new String(passField.getPassword());
+
+        if (username.isEmpty() || password.isEmpty()) {
+            showNotification("Kullanıcı adı ve şifre boş bırakılamaz!", "Hata", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String role = validateLogin(username, password);
+        if (role != null) {
+            showNotification("Giriş başarılı!", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
+            frame.dispose(); // Close the login screen
+            
+            // Show role-based screen
+            if (role.equalsIgnoreCase("Admin")) {
+                openAdminScreen(username);
+            } else if (role.equalsIgnoreCase("Kullanıcı")) {
+                openUserScreen(username);
             }
-
-            String role = validateLogin(username, password);
-            if (role != null) {
-                showNotification("Giriş başarılı!", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
-            	frmEnvosale.dispose(); // Giriş ekranını kapat
-                // Role göre ekran açma
-                if (role.equalsIgnoreCase("Admin")) {
-                	adminScreen yoneticiekrani=new adminScreen(username);
-                	yoneticiekrani.setVisible(true);
-                } else if (role.equalsIgnoreCase("Kullanıcı")) {
-                    UserScreen kullaniciekrani=new UserScreen(username);
-                    kullaniciekrani.setVisible(true);           
-                }
-
-            } else {
-                showNotification("Hatalı kullanıcı adı veya şifre!", "Hata", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        frmEnvosale.setVisible(true);
+        } else {
+            showNotification("Hatalı kullanıcı adı veya şifre!", "Hata", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void showNotification(String message, String title, int messageType) {
@@ -155,12 +170,29 @@ public class LoginScreen {
         }
     }
 
+    private void openAdminScreen(String username) {
+        adminScreen adminScreen = new adminScreen(username);
+        adminScreen.setVisible(true);
+    }
+
+    private void openUserScreen(String username) {
+        UserScreen userScreen = new UserScreen(username);
+        userScreen.setVisible(true);
+    }
+
+    private void openRegistrationScreen() {
+        KayıtOlEkranı registrationScreen = new KayıtOlEkranı();
+        registrationScreen.setVisible(true);
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(LoginScreen::new);
     }
 
 	public void setVisible(boolean b) {
-		// TODO Auto-generated method stub
+		LoginScreen frame = null;
+		frame.setVisible(b);
 		
 	}
+
 }
