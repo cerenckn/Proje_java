@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
@@ -8,67 +9,43 @@ public class KullanıcıYönetimiadmin extends JFrame {
     private DefaultTableModel model;
     private JTextField txtKullaniciAdi, txtEmail, txtSifre;
     private JButton btnEkle, btnGuncelle, btnSil;
-    private Connection conn; 
+    private Connection conn;
     private int selectedRowId = -1;
 
     public KullanıcıYönetimiadmin() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png"));
         setTitle("Admin Kullanıcı Yönetimi");
         setSize(700, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(null);
+
+        // Ana panel
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBackground(new Color(240, 240, 240));
+        add(panel);
 
         baglantiKur();
 
         // Kullanıcı Listesi
         JLabel lblKullaniciListesi = new JLabel("Mevcut Kullanıcılar:");
         lblKullaniciListesi.setBounds(20, 20, 150, 25);
-        add(lblKullaniciListesi);
+        lblKullaniciListesi.setFont(new Font("Arial", Font.BOLD, 14));
+        panel.add(lblKullaniciListesi);
 
         model = new DefaultTableModel(new String[]{"ID", "Kullanıcı Adı", "Email", "Şifre"}, 0);
         tableKullanicilar = new JTable(model);
         JScrollPane sp = new JScrollPane(tableKullanicilar);
         sp.setBounds(20, 50, 650, 200);
-        add(sp);
+        panel.add(sp);
 
         // Form Alanları
-        JLabel lblKullaniciAdi = new JLabel("Kullanıcı Adı:");
-        lblKullaniciAdi.setBounds(20, 270, 100, 25);
-        add(lblKullaniciAdi);
-
-        txtKullaniciAdi = new JTextField();
-        txtKullaniciAdi.setBounds(130, 270, 150, 25);
-        add(txtKullaniciAdi);
-
-        JLabel lblEmail = new JLabel("Email:");
-        lblEmail.setBounds(20, 310, 100, 25);
-        add(lblEmail);
-
-        txtEmail = new JTextField();
-        txtEmail.setBounds(130, 310, 150, 25);
-        add(txtEmail);
-
-        JLabel lblSifre = new JLabel("Şifre:");
-        lblSifre.setBounds(20, 350, 100, 25);
-        add(lblSifre);
-
-        txtSifre = new JTextField();
-        txtSifre.setBounds(130, 350, 150, 25);
-        add(txtSifre);
+        addFormFields(panel);
 
         // Butonlar
-        btnEkle = new JButton("Kullanıcı Ekle");
-        btnEkle.setBounds(300, 270, 150, 30);
-        add(btnEkle);
+        addButtons(panel);
 
-        btnGuncelle = new JButton("Kullanıcıyı Güncelle");
-        btnGuncelle.setBounds(300, 310, 150, 30);
-        add(btnGuncelle);
-
-        btnSil = new JButton("Kullanıcıyı Sil");
-        btnSil.setBounds(300, 350, 150, 30);
-        add(btnSil);
-
+        // Kullanıcı listesine tıklama işlemi
         tableKullanicilar.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = tableKullanicilar.getSelectedRow();
@@ -79,25 +56,79 @@ public class KullanıcıYönetimiadmin extends JFrame {
             }
         });
 
-        btnEkle.addActionListener(e -> kullaniciEkle());
-        btnGuncelle.addActionListener(e -> kullaniciGuncelle());
-        btnSil.addActionListener(e -> kullaniciSil());
-
         kullaniciListesiniYukle();
     }
- 
-    private void baglantiKur() { 
+
+    private void addFormFields(JPanel panel) {
+        JLabel lblKullaniciAdi = new JLabel("Kullanıcı Adı:");
+        lblKullaniciAdi.setBounds(20, 270, 100, 25);
+        lblKullaniciAdi.setFont(new Font("Arial", Font.PLAIN, 12));
+        panel.add(lblKullaniciAdi);
+
+        txtKullaniciAdi = new JTextField();
+        txtKullaniciAdi.setBounds(130, 270, 200, 25);
+        txtKullaniciAdi.setFont(new Font("Arial", Font.PLAIN, 12));
+        panel.add(txtKullaniciAdi);
+
+        JLabel lblEmail = new JLabel("Email:");
+        lblEmail.setBounds(20, 310, 100, 25);
+        lblEmail.setFont(new Font("Arial", Font.PLAIN, 12));
+        panel.add(lblEmail);
+
+        txtEmail = new JTextField();
+        txtEmail.setBounds(130, 310, 200, 25);
+        txtEmail.setFont(new Font("Arial", Font.PLAIN, 12));
+        panel.add(txtEmail);
+
+        JLabel lblSifre = new JLabel("Şifre:");
+        lblSifre.setBounds(20, 350, 100, 25);
+        lblSifre.setFont(new Font("Arial", Font.PLAIN, 12));
+        panel.add(lblSifre);
+
+        txtSifre = new JTextField();
+        txtSifre.setBounds(130, 350, 200, 25);
+        txtSifre.setFont(new Font("Arial", Font.PLAIN, 12));
+        panel.add(txtSifre);
+    }
+
+    private void addButtons(JPanel panel) {
+        btnEkle = new JButton("Kullanıcı Ekle");
+        btnEkle.setBounds(350, 270, 150, 30);
+        btnEkle.setFont(new Font("Arial", Font.BOLD, 12));
+        btnEkle.setBackground(new Color(85, 204, 0)); // Yeşil renk
+        btnEkle.setForeground(Color.WHITE);
+        btnEkle.addActionListener(e -> kullaniciEkle());
+        panel.add(btnEkle);
+
+        btnGuncelle = new JButton("Kullanıcıyı Güncelle");
+        btnGuncelle.setBounds(350, 310, 150, 30);
+        btnGuncelle.setFont(new Font("Arial", Font.BOLD, 12));
+        btnGuncelle.setBackground(new Color(255, 153, 0)); // Turuncu renk
+        btnGuncelle.setForeground(Color.WHITE);
+        btnGuncelle.addActionListener(e -> kullaniciGuncelle());
+        panel.add(btnGuncelle);
+
+        btnSil = new JButton("Kullanıcıyı Sil");
+        btnSil.setBounds(350, 350, 150, 30);
+        btnSil.setFont(new Font("Arial", Font.BOLD, 12));
+        btnSil.setBackground(new Color(255, 69, 0)); // Kırmızı renk
+        btnSil.setForeground(Color.WHITE);
+        btnSil.addActionListener(e -> kullaniciSil());
+        panel.add(btnSil);
+    }
+
+    private void baglantiKur() {
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost/user_management", "root", "*Crn123.*");
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Veritabanı Bağlantısı Hatası!");
-        } 
+        }
     }
 
     private void kullaniciListesiniYukle() {
         try {
-            model.setRowCount(0); 
+            model.setRowCount(0); // Mevcut satırları temizle
             String sql = "SELECT id, username, email, password FROM test_users WHERE role = 'kullanıcı'";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -114,7 +145,6 @@ public class KullanıcıYönetimiadmin extends JFrame {
             JOptionPane.showMessageDialog(this, "Kullanıcı listesi yüklenirken bir hata oluştu!");
         }
     }
-
 
     private void kullaniciEkle() {
         try {
@@ -144,7 +174,6 @@ public class KullanıcıYönetimiadmin extends JFrame {
             JOptionPane.showMessageDialog(this, "Kullanıcı eklenirken bir hata oluştu!");
         }
     }
-
 
     private void kullaniciGuncelle() {
         try {

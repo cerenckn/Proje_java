@@ -12,6 +12,7 @@ public class adminurunYonetimi extends JFrame {
     private int selectedRowId = -1;
 
     public adminurunYonetimi() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png"));
         setTitle("Ürün Yönetimi Ekranı");
         setSize(900, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

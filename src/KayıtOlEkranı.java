@@ -1,79 +1,94 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
-import java.awt.Font;
 
 public class KayıtOlEkranı extends JFrame {
     public KayıtOlEkranı() {
+       
         JFrame frame = new JFrame("Kayıt Ol");
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png"));
         frame.setSize(524, 438);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
         frame.setLocationRelativeTo(null);
-        
+        frame.getContentPane().setBackground(new Color(240, 248, 255));
 
-        // Kullanıcı Adı Label ve Field
+        JLabel titleLabel = new JLabel("Kayıt Ol", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        titleLabel.setBounds(0, 0, 524, 40);
+        titleLabel.setForeground(new Color(50, 50, 50));
+        frame.getContentPane().add(titleLabel);
+
         JLabel userLabel = new JLabel("Kullanıcı Adı:");
         userLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        userLabel.setBounds(22, 25, 153, 30);
+        userLabel.setBounds(22, 70, 153, 30);
         frame.getContentPane().add(userLabel);
 
         JTextField userField = new JTextField();
-        userField.setBounds(150, 28, 258, 30);
+        userField.setBounds(150, 70, 258, 30);
+        userField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        userField.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 1));
         frame.getContentPane().add(userField);
 
-        // Email Label ve Field
         JLabel lblEmail = new JLabel("E-mail:");
         lblEmail.setFont(new Font("Tahoma", Font.BOLD, 15));
-        lblEmail.setBounds(23, 84, 100, 30);
+        lblEmail.setBounds(23, 120, 100, 30);
         frame.getContentPane().add(lblEmail);
 
-        JTextField emailField = new JTextField(); // Email alanı düzeltildi
-        emailField.setBounds(150, 87, 258, 30);
+        JTextField emailField = new JTextField();
+        emailField.setBounds(150, 120, 258, 30);
+        emailField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        emailField.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 1));
         frame.getContentPane().add(emailField);
 
-        // Şifre Label ve Field
         JLabel passLabel = new JLabel("Şifre:");
         passLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        passLabel.setBounds(23, 143, 100, 30);
+        passLabel.setBounds(23, 170, 100, 30);
         frame.getContentPane().add(passLabel);
 
         JPasswordField passField = new JPasswordField();
-        passField.setBounds(150, 146, 258, 30);
+        passField.setBounds(150, 170, 258, 30);
+        passField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        passField.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 1));
         frame.getContentPane().add(passField);
 
-        // Rol Label ve ComboBox
+
         JLabel roleLabel = new JLabel("Rol:");
         roleLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        roleLabel.setBounds(23, 186, 100, 30);
+        roleLabel.setBounds(23, 220, 100, 30);
         frame.getContentPane().add(roleLabel);
 
         String[] roles = {"Kullanıcı", "Admin"};
         JComboBox<String> roleBox = new JComboBox<>(roles);
-        roleBox.setFont(new Font("Tahoma", Font.BOLD, 14));
-        roleBox.setBounds(152, 186, 180, 30);
+        roleBox.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        roleBox.setBounds(152, 220, 180, 30);
         frame.getContentPane().add(roleBox);
 
-        // Kayıt Ol Butonu
+        // Kayıt Ol Butonumuzz
         JButton registerButton = new JButton("Kayıt Ol");
         registerButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-        registerButton.setBounds(154, 226, 100, 30);
+        registerButton.setBounds(154, 270, 100, 35);
+        registerButton.setBackground(new Color(50, 205, 50));  // Yeşil renk
+        registerButton.setForeground(Color.WHITE);
+        registerButton.setBorder(BorderFactory.createLineBorder(new Color(50, 205, 50), 1));
+        registerButton.setFocusPainted(false);
+        registerButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         frame.getContentPane().add(registerButton);
 
-        // Kayıt Ol Butonu Aksiyonları
+        // Kayıt Ol Butonu İşlemleriii
         registerButton.addActionListener(e -> {
             String username = userField.getText();
-            String email = emailField.getText(); // Email alanı alındı
+            String email = emailField.getText();
             String password = new String(passField.getPassword());
             String role = (String) roleBox.getSelectedItem();
 
-            // Girdi Kontrolleri
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Tüm alanları doldurunuz!", "Hata", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Veritabanına Kaydetme
+ 
             if (registerUser(username, email, password, role)) {
                 JOptionPane.showMessageDialog(null, "Kayıt Başarılı!");
                 frame.dispose();
@@ -85,25 +100,21 @@ public class KayıtOlEkranı extends JFrame {
         frame.setVisible(true);
     }
 
-    /**
-     * Kullanıcıyı veritabanına kaydeder. 
-     * Eğer kullanıcı adı veya email zaten kayıtlıysa false döner.
-     */
+   
     private boolean registerUser(String username, String email, String password, String role) {
-        try (Connection conn = DatabaseConnection.getConnection()) { // Veritabanı bağlantısını alın
+        try (Connection conn = DatabaseConnection.getConnection()) {
             if (conn == null) {
                 JOptionPane.showMessageDialog(null, "Veritabanına bağlanılamadı!");
                 return false;
             }
 
-            // Kullanıcı adı ve email kontrolü
             String checkQuery = "SELECT username FROM test_users WHERE username = ? OR email = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
             checkStmt.setString(1, username);
             checkStmt.setString(2, email);
             ResultSet rs = checkStmt.executeQuery();
 
-            if (rs.next()) { // Kullanıcı adı veya email mevcutsa
+            if (rs.next()) { // kullanıcı adı veya emaili varsa sistemde
                 return false;
             }
 
@@ -114,8 +125,8 @@ public class KayıtOlEkranı extends JFrame {
             insertStmt.setString(2, email);
             insertStmt.setString(3, password);
             insertStmt.setString(4, role); 
-            int rowsInserted = insertStmt.executeUpdate(); // Kaç satırın eklendiğini kontrol edin
-            return rowsInserted > 0; // Kayıt başarılı mı kontrol et
+            int rowsInserted = insertStmt.executeUpdate();
+            return rowsInserted > 0; // kayıt başarılı mı?
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Hata: " + e.getMessage());
             e.printStackTrace();

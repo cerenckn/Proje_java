@@ -40,108 +40,84 @@ public class adminScreen {
 
     private void initialize() {
         frmEnvosale = new JFrame();
-        frmEnvosale.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\path\\to\\your\\icon.png"));
+        frmEnvosale.setIconImage(Toolkit.getDefaultToolkit().getImage("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png"));
         frmEnvosale.setTitle("E-INVOSALE");
-        frmEnvosale.setBounds(100, 100, 1000, 700);
+        frmEnvosale.setBounds(100, 100, 800, 600);
         frmEnvosale.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frmEnvosale.getContentPane().setLayout(new BorderLayout());
+        frmEnvosale.getContentPane().setBackground(Color.WHITE);
 
         JMenuBar menuBar = new JMenuBar();
         frmEnvosale.setJMenuBar(menuBar);
 
         JMenu adminMenu = new JMenu("Admin Paneli");
-        adminMenu.setBackground(new Color(245, 245, 245));
         adminMenu.setFont(new Font("Roboto", Font.BOLD, 14));
+
         menuBar.add(adminMenu);
 
-        frmEnvosale.getContentPane().setLayout(new BorderLayout());
 
-        // Sol Menü
         JPanel sideMenu = new JPanel();
-        sideMenu.setPreferredSize(new Dimension(220, 600));
-        sideMenu.setLayout(null);
-        sideMenu.setBackground(new Color(248, 248, 248));
+        sideMenu.setPreferredSize(new Dimension(200, 600)); // Yan menüyü 200px genişliğinde yapalım
+        sideMenu.setLayout(new BoxLayout(sideMenu, BoxLayout.Y_AXIS));
+        sideMenu.setBackground(new Color(245, 245, 245));  // Daha açık renk
         frmEnvosale.getContentPane().add(sideMenu, BorderLayout.WEST);
 
-        // Butonlar
-        createSideMenuButton(sideMenu, "Ürün Yönetimi", 10, 90, new Color(198, 224, 235), "urunYonetimi");
-        createSideMenuButton(sideMenu, "Kullanıcı Yönetimi", 100, 90, new Color(255, 216, 216), "kullaniciYonetimi");
-        createSideMenuButton(sideMenu, "Satış ve Fatura Raporları", 190, 90, new Color(255, 239, 186), "satisRaporlari");
-        createSideMenuButton(sideMenu, "Profil", 280, 90, new Color(254, 220, 170), "profil");
-        createSideMenuButton(sideMenu, "Çıkış Yap", 370, 90, new Color(255, 160, 145), "exit");
 
-        // CardLayout için Panel
+        createSideMenuButton(sideMenu, "Ürün Yönetimi", new Color(198, 224, 235), "urunYonetimi");
+        createSideMenuButton(sideMenu, "Kullanıcı Yönetimi", new Color(255, 216, 216), "kullaniciYonetimi");
+        createSideMenuButton(sideMenu, "Satış ve Fatura Raporları", new Color(255, 239, 186), "satisRaporlari");
+        createSideMenuButton(sideMenu, "Profil", new Color(254, 220, 170), "profil");
+        createSideMenuButton(sideMenu, "Çıkış Yap", new Color(255, 160, 145), "exit");
+
+
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         frmEnvosale.getContentPane().add(cardPanel, BorderLayout.CENTER);
 
-        // Sayfalar
-        JPanel satisRaporlariPanel = new JPanel();
-        satisRaporlariPanel.setBackground(new Color(255, 255, 255));
-        satisRaporlariPanel.add(new JLabel("Satış ve Fatura Raporları Sayfası"));
-        cardPanel.add(satisRaporlariPanel, "satisRaporlari");
 
-        JPanel urunYonetimiPanel = new JPanel();
-        urunYonetimiPanel.setBackground(new Color(255, 255, 255));
-        urunYonetimiPanel.add(new JLabel("Ürün Yönetimi Sayfası"));
-        cardPanel.add(urunYonetimiPanel, "urunYonetimi");
-
-        JPanel kullaniciYonetimiPanel = new JPanel();
-        kullaniciYonetimiPanel.setBackground(new Color(255, 255, 255));
-        kullaniciYonetimiPanel.add(new JLabel("Kullanıcı Yönetimi Sayfası"));
-        cardPanel.add(kullaniciYonetimiPanel, "kullaniciYonetimi");
-
-        JPanel profilPanel = new JPanel();
-        profilPanel.setBackground(new Color(255, 255, 255));
-        profilPanel.add(new JLabel("Profil Sayfası"));
-        cardPanel.add(profilPanel, "profil");
+        createCardPage("Satış ve Fatura Raporları Sayfası", "satisRaporlari");
+        createCardPage("Ürün Yönetimi Sayfası", "urunYonetimi");
+        createCardPage("Kullanıcı Yönetimi Sayfası", "kullaniciYonetimi");
+        createCardPage("Profil Sayfası", "profil");
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         topPanel.setPreferredSize(new Dimension(1000, 100));
-        topPanel.setBackground(new Color(198, 224, 235));
+        topPanel.setBackground(new Color(10, 51, 102)); // Dark Blue
         frmEnvosale.getContentPane().add(topPanel, BorderLayout.NORTH);
 
         JLabel lblWelcome = new JLabel();
-        lblWelcome.setFont(new Font("Roboto", Font.BOLD, 16));
-        lblWelcome.setForeground(Color.BLACK);
+        lblWelcome.setFont(new Font("Roboto", Font.BOLD, 18));
+        lblWelcome.setForeground(Color.WHITE);
         lblWelcome.setHorizontalAlignment(SwingConstants.LEFT);
         lblWelcome.setText(getWelcomeText());
         topPanel.add(lblWelcome, BorderLayout.WEST);
 
         JLabel lblSalesSummary = new JLabel();
         lblSalesSummary.setFont(new Font("Roboto", Font.PLAIN, 14));
-        lblSalesSummary.setForeground(Color.BLACK);
+        lblSalesSummary.setForeground(Color.WHITE);
         lblSalesSummary.setHorizontalAlignment(SwingConstants.RIGHT);
         lblSalesSummary.setText(getSalesSummaryText());
         topPanel.add(lblSalesSummary, BorderLayout.CENTER);
-
-        JLabel lblUsdInfo = new JLabel();
-        lblUsdInfo.setFont(new Font("Roboto", Font.PLAIN, 14));
-        lblUsdInfo.setForeground(Color.BLACK);
-        lblUsdInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblUsdInfo.setText(""
-        		+ "USD Kuru: " + getUsdExchangeRate() + " TL");
-        topPanel.add(lblUsdInfo, BorderLayout.SOUTH);
     }
-    // Menü butonları için yardımcı metot
-    private void createSideMenuButton(JPanel sideMenu, String text, int yPosition, int height, Color bgColor, String targetPage) {
+
+    private void createSideMenuButton(JPanel sideMenu, String text, Color bgColor, String targetPage) {
         JButton button = new JButton(text);
-        button.setBounds(10, yPosition, 200, height);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setFont(new Font("Roboto", Font.BOLD, 14));
         button.setBackground(bgColor);
         button.setForeground(Color.BLACK);
-        button.setBorderPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Padding ekleyelim
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        // Buton üzerine gelince renk değişimi
+        
+        //buton üzerine gelince renk değişimi
         button.addMouseListener(new MouseAdapter() {
-            @Override
+ 
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(button.getBackground().darker());
             }
 
-            @Override
             public void mouseExited(MouseEvent e) {
                 button.setBackground(bgColor);
             }
@@ -152,13 +128,21 @@ public class adminScreen {
             if ("exit".equals(targetPage)) {
                 int confirm = JOptionPane.showConfirmDialog(null, "Çıkmak istediğinizden emin misiniz?", "Çıkış", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
-                    System.exit(0); // Uygulamayı kapatır
+                    System.exit(0);
                 }
             } else {
                 showNotification("Ekran açılıyor: " + text, targetPage);
             }
         });
         sideMenu.add(button);
+        sideMenu.add(Box.createRigidArea(new Dimension(0, 10))); // Butonlar arasında boşluk
+    }
+
+    private void createCardPage(String label, String name) {
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(255, 255, 255)); 
+        panel.add(new JLabel(label));
+        cardPanel.add(panel, name);
     }
 
     private void showNotification(String message, String targetPanel) {
@@ -170,7 +154,7 @@ public class adminScreen {
         JLabel label = new JLabel(message, SwingConstants.CENTER);
         label.setFont(new Font("Roboto", Font.BOLD, 12));
         label.setOpaque(true);
-        label.setBackground(new Color(198, 224, 235)); // Soft pastel arka plan
+        label.setBackground(new Color(198, 224, 235)); 
         label.setForeground(Color.BLACK);
 
         notification.getContentPane().add(label, BorderLayout.CENTER);
@@ -209,7 +193,7 @@ public class adminScreen {
     private String getWelcomeText() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
         String date = sdf.format(new Date());
-        return "Hoş geldiniz," + username + ". Bugün: " + date;
+        return "Hoş geldiniz, " + username + ". Bugün: " + date;
     }
 
     private String getSalesSummaryText() {
@@ -246,42 +230,6 @@ public class adminScreen {
             JOptionPane.showMessageDialog(null, "Toplam stoğu alırken bir hata oluştu.", "Hata", JOptionPane.ERROR_MESSAGE);
         }
         return totalStock;
-    }
-
-
-    private int getTotalSalesCount() {
-        int totalSalesCount = 0;
-        String query = "SELECT COUNT(*) AS total_sales_count FROM satislar WHERE DATE(satis_tarihi) = CURDATE()";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                totalSalesCount = rs.getInt("total_sales_count");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Bugünkü satış sayısını alırken bir hata oluştu.", "Hata", JOptionPane.ERROR_MESSAGE);
-        }
-        return totalSalesCount;
-    }
-
-    private double getAverageSalesPrice() {
-        double avgSalesPrice = 0;
-        String query = "SELECT AVG(toplam_fiyat) AS avg_sales_price FROM satislar WHERE DATE(satis_tarihi) = CURDATE()";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                avgSalesPrice = rs.getDouble("avg_sales_price");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Ortalama satış fiyatını alırken bir hata oluştu.", "Hata", JOptionPane.ERROR_MESSAGE);
-        }
-        return avgSalesPrice;
-    }
-
-    private String getUsdExchangeRate() {
-        double usdRate = 35.22; // Bu değeri manuel olarak değiştirebilirsiniz.
-        return String.format("%.2f", usdRate);
     }
 
     public static void main(String[] args) {

@@ -15,12 +15,12 @@ import java.util.Random;
     private JTextField dateField;
 
     public FaturaOluşturmaEkranı() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png"));
         setTitle("Fatura Oluşturma");
         setSize(550, 350);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
 
-        // Main Panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.setBackground(new Color(245, 245, 245));
@@ -29,7 +29,7 @@ import java.util.Random;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        // Header
+
         JLabel headerLabel = new JLabel("Fatura Oluşturma");
         headerLabel.setFont(new Font("Arial", Font.BOLD, 20));
         headerLabel.setForeground(new Color(54, 54, 54));
@@ -39,7 +39,7 @@ import java.util.Random;
         gbc.gridwidth = 2;
         mainPanel.add(headerLabel, gbc);
 
-        // Invoice Number
+
         JLabel invoiceLabel = new JLabel("Fatura No:");
         invoiceLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
         gbc.gridx = 0;
@@ -54,7 +54,6 @@ import java.util.Random;
         gbc.gridy = 1;
         mainPanel.add(invoiceField, gbc);
 
-        // Date
         JLabel dateLabel = new JLabel("Tarih:");
         dateLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
         gbc.gridx = 0;
@@ -68,7 +67,6 @@ import java.util.Random;
         gbc.gridy = 2;
         mainPanel.add(dateField, gbc);
 
-        // Total Amount
         JLabel tutarLabel = new JLabel("Tutar:");
         tutarLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
         gbc.gridx = 0;
@@ -81,7 +79,7 @@ import java.util.Random;
         gbc.gridy = 3;
         mainPanel.add(tutarField, gbc);
 
-        // Buttons Panel
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setBackground(new Color(245, 245, 245));
@@ -90,7 +88,6 @@ import java.util.Random;
         saveButton.setFont(new Font("Tahoma", Font.BOLD, 13));
         saveButton.setBackground(new Color(173, 216, 230));
         saveButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 if (tutarField.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(FaturaOluşturmaEkranı.this, "Tutar alanı boş bırakılamaz!", "Hata", JOptionPane.ERROR_MESSAGE);
@@ -126,9 +123,9 @@ import java.util.Random;
     }
 
     private void saveInvoice(String numara, String tarih, String tutar) {
-        String url = "jdbc:mysql://localhost:3306/user_management"; // Update with your database URL
-        String user = "root"; // Update with your database username
-        String password = "*Crn123.*"; // Update with your database password
+        String url = "jdbc:mysql://localhost:3306/user_management"; 
+        String user = "root"; 
+        String password = "*Crn123.*";
 
         String query = "INSERT INTO invoices (numara, tarih, tutar) VALUES (?, ?, ?)";
 

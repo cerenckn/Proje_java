@@ -9,7 +9,7 @@ public class LoginScreen {
     private JTextField txtRegisterPrompt;
 
     public LoginScreen() {
-        // Setup frame
+//frame  oluşturalım
         JFrame frame = new JFrame("Giriş Yap");
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png"));
         frame.setSize(512, 400);
@@ -27,12 +27,11 @@ public class LoginScreen {
     }
 
     private void setupUIComponents(JFrame frame) {
-        // Welcome label
+
         JLabel welcomeLabel = createLabel("E-INVOSALE", 129, 50, 339, 48, new Font("Arial", Font.BOLD, 24), new Color(47, 79, 79));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         frame.getContentPane().add(welcomeLabel);
 
-        // Username field
         JLabel userLabel = createLabel("Kullanıcı Adı:", 20, 160, 120, 30, new Font("Tahoma", Font.BOLD, 15), null);
         frame.getContentPane().add(userLabel);
 
@@ -42,7 +41,7 @@ public class LoginScreen {
         userField.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 250)));
         frame.getContentPane().add(userField);
 
-        // Password field
+
         JLabel passLabel = createLabel("Şifre:", 20, 197, 120, 30, new Font("Tahoma", Font.BOLD, 15), null);
         frame.getContentPane().add(passLabel);
 
@@ -52,12 +51,12 @@ public class LoginScreen {
         passField.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 250)));
         frame.getContentPane().add(passField);
 
-        // Login button
+
         JButton loginButton = createButton("Giriş Yap", 264, 235, 130, 40, new Color(70, 130, 180), new Color(100, 149, 237));
         loginButton.addActionListener(e -> handleLogin(userField, passField, frame));
         frame.getContentPane().add(loginButton);
         
-        // Register prompt text
+
         txtRegisterPrompt = new JTextField("Sisteme kayıtlı değilseniz kayıt olunuz.");
         txtRegisterPrompt.setBackground(new Color(245, 245, 245));
         txtRegisterPrompt.setBounds(129, 275, 265, 30);
@@ -66,7 +65,6 @@ public class LoginScreen {
         txtRegisterPrompt.setBorder(null);
         frame.getContentPane().add(txtRegisterPrompt);
         
-        // Register button
         JButton registerButton = createButton("Kayıt Ol", 264, 315, 130, 40, new Color(230, 182, 193), new Color(255, 105, 180));
         registerButton.addActionListener(e -> openRegistrationScreen());
         frame.getContentPane().add(registerButton);
@@ -88,7 +86,6 @@ public class LoginScreen {
         button.setForeground(Color.WHITE);
         button.setBorder(BorderFactory.createEmptyBorder());
         
-        // Hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(hoverColor);
@@ -113,7 +110,7 @@ public class LoginScreen {
         logoLabel.setBounds(20,20, 150, 100);
         frame.getContentPane().add(logoLabel);
     }
-
+        //Giriş kontrolü
     private void handleLogin(JTextField userField, JPasswordField passField, JFrame frame) {
         String username = userField.getText();
         String password = new String(passField.getPassword());
@@ -126,9 +123,8 @@ public class LoginScreen {
         String role = validateLogin(username, password);
         if (role != null) {
             showNotification("Giriş başarılı!", "Başarılı", JOptionPane.INFORMATION_MESSAGE);
-            frame.dispose(); // Close the login screen
-            
-            // Show role-based screen
+            frame.dispose();
+
             if (role.equalsIgnoreCase("Admin")) {
                 openAdminScreen(username);
             } else if (role.equalsIgnoreCase("Kullanıcı")) {
@@ -169,7 +165,7 @@ public class LoginScreen {
             return null;
         }
     }
-
+    //role uygun pencere açtıran fonksiyonlar
     private void openAdminScreen(String username) {
         adminScreen adminScreen = new adminScreen(username);
         adminScreen.setVisible(true);

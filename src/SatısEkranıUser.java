@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Toolkit;
 
 public class SatısEkranıUser extends JFrame {
     private JTable tableUrunler, tableSepet;
@@ -17,21 +18,17 @@ public class SatısEkranıUser extends JFrame {
     private Connection conn;
 
     public SatısEkranıUser() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\crnck\\eclipse-workspace\\GUI.oop\\GUI.oop\\src\\images\\invoice.png"));
         setTitle("Satış Ekranı");
-        setSize(900, 700);
+        setSize(887, 498);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
-        getContentPane().setBackground(new Color(255, 253, 250));  // Soft pastel background
-
-        // Initialize connection and models
+        getContentPane().setBackground(new Color(255, 253, 250));  
+        
         initializeConnection();
         initializeTableModels();
-
-        // Initialize UI components
         initializeComponents();
-
-        // Load available products into the table
         loadProducts();
     }
 
@@ -50,69 +47,68 @@ public class SatısEkranıUser extends JFrame {
 
     private void initializeComponents() {
         // Labels and Tables
-        JLabel lblUrunler = createLabel("Stoktaki Ürünler:", 20, 20, new Color(85, 98, 112)); // Soft grayish color
+        JLabel lblUrunler = createLabel("Stoktaki Ürünler:", 20, 20, new Color(85, 98, 112));
         getContentPane().add(lblUrunler);
 
         tableUrunler = new JTable(modelUrunler);
-        tableUrunler.setBackground(new Color(240, 240, 240)); // Light pastel gray
-        tableUrunler.setForeground(new Color(33, 37, 41)); // Dark gray text
-        tableUrunler.setSelectionBackground(new Color(184, 205, 255)); // Light blue selection
+        tableUrunler.setBackground(new Color(240, 240, 240)); 
+        tableUrunler.setForeground(new Color(33, 37, 41));
+        tableUrunler.setSelectionBackground(new Color(184, 205, 255)); 
         JScrollPane spUrunler = new JScrollPane(tableUrunler);
         spUrunler.setBounds(10, 61, 400, 200);
         getContentPane().add(spUrunler);
 
-        JLabel lblSepet = createLabel("Sepetteki Ürünler:", 450, 20, new Color(85, 98, 112)); // Soft grayish color
+        JLabel lblSepet = createLabel("Sepetteki Ürünler:", 450, 20, new Color(85, 98, 112)); 
         getContentPane().add(lblSepet);
 
         tableSepet = new JTable(modelSepet);
-        tableSepet.setBackground(new Color(240, 240, 240)); // Light pastel gray
-        tableSepet.setForeground(new Color(33, 37, 41)); // Dark gray text
-        tableSepet.setSelectionBackground(new Color(184, 205, 255)); // Light blue selection
+        tableSepet.setBackground(new Color(240, 240, 240)); 
+        tableSepet.setForeground(new Color(33, 37, 41)); 
+        tableSepet.setSelectionBackground(new Color(184, 205, 255)); 
         JScrollPane spSepet = new JScrollPane(tableSepet);
         spSepet.setBounds(450, 61, 400, 200);
         getContentPane().add(spSepet);
 
-        // Adet and Toplam Fiyat Text Fields
-        JLabel lblAdet = createLabel("Adet:", 20, 302, new Color(85, 98, 112)); // Soft grayish color
+        JLabel lblAdet = createLabel("Adet:", 20, 302, new Color(85, 98, 112)); 
         getContentPane().add(lblAdet);
 
         txtAdet = new JTextField();
         txtAdet.setBounds(70, 303, 100, 25);
-        txtAdet.setBackground(new Color(255, 255, 255)); // White background
-        txtAdet.setForeground(new Color(33, 37, 41)); // Dark gray text
-        txtAdet.setBorder(BorderFactory.createLineBorder(new Color(186, 210, 234))); // Soft blue border
+        txtAdet.setBackground(new Color(255, 255, 255)); 
+        txtAdet.setForeground(new Color(33, 37, 41)); 
+        txtAdet.setBorder(BorderFactory.createLineBorder(new Color(186, 210, 234))); 
         getContentPane().add(txtAdet);
 
-        JLabel lblToplamFiyat = createLabel("Toplam Fiyat:", 450, 280, new Color(85, 98, 112)); // Soft grayish color
+        JLabel lblToplamFiyat = createLabel("Toplam Fiyat:", 450, 280, new Color(85, 98, 112)); 
         getContentPane().add(lblToplamFiyat);
 
         txtToplamFiyat = new JTextField();
         txtToplamFiyat.setEditable(false);
         txtToplamFiyat.setBounds(580, 280, 120, 25);
-        txtToplamFiyat.setBackground(new Color(255, 255, 255)); // White background
-        txtToplamFiyat.setForeground(new Color(33, 37, 41)); // Dark gray text
-        txtToplamFiyat.setBorder(BorderFactory.createLineBorder(new Color(186, 210, 234))); // Soft blue border
+        txtToplamFiyat.setBackground(new Color(255, 255, 255)); 
+        txtToplamFiyat.setForeground(new Color(33, 37, 41)); 
+        txtToplamFiyat.setBorder(BorderFactory.createLineBorder(new Color(186, 210, 234))); 
         getContentPane().add(txtToplamFiyat);
 
-        // Buttons with hover effects and styled backgrounds
-        btnSepeteEkle = createStyledButton("Sepete Ekle", 20, 350, new Color(52, 152, 219), new Color(41, 128, 185)); // Pastel blue
+       
+        btnSepeteEkle = createStyledButton("Sepete Ekle", 20, 350, new Color(52, 152, 219), new Color(41, 128, 185));
         getContentPane().add(btnSepeteEkle);
 
-        btnUrunCikar = createStyledButton("Ürün Çıkar", 150, 350, new Color(243, 156, 18), new Color(211, 84, 0)); // Pastel orange
+        btnUrunCikar = createStyledButton("Ürün Çıkar", 150, 350, new Color(243, 156, 18), new Color(211, 84, 0)); 
         getContentPane().add(btnUrunCikar);
 
-        btnSepetiTemizle = createStyledButton("Sepeti Temizle", 450, 320, new Color(46, 204, 113), new Color(39, 174, 96)); // Pastel green
+        btnSepetiTemizle = createStyledButton("Sepeti Temizle", 450, 320, new Color(46, 204, 113), new Color(39, 174, 96)); 
         getContentPane().add(btnSepetiTemizle);
 
-        btnSatisYap = createStyledButton("Satış Yap", 620, 320, new Color(231, 76, 60), new Color(192, 57, 43)); // Pastel red
+        btnSatisYap = createStyledButton("Satış Yap", 620, 320, new Color(231, 76, 60), new Color(192, 57, 43));
         getContentPane().add(btnSatisYap);
 
-        // Search text field with padding and styling
+      
         txtSearch = new JTextField();
         txtSearch.setBounds(160, 26, 200, 25);
-        txtSearch.setBackground(new Color(230, 230, 250)); // White background
-        txtSearch.setForeground(new Color(128, 128, 128)); // Dark gray text
-        txtSearch.setBorder(BorderFactory.createLineBorder(new Color(186, 210, 234))); // Soft blue border
+        txtSearch.setBackground(new Color(230, 230, 250)); 
+        txtSearch.setForeground(new Color(128, 128, 128)); 
+        txtSearch.setBorder(BorderFactory.createLineBorder(new Color(186, 210, 234))); 
         getContentPane().add(txtSearch);
         txtSearch.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
@@ -120,7 +116,7 @@ public class SatısEkranıUser extends JFrame {
             }
         });
 
-        // Add action listeners to buttons
+      
         btnSepeteEkle.addActionListener(e -> addToCart());
         btnUrunCikar.addActionListener(e -> removeFromCart());
         btnSepetiTemizle.addActionListener(e -> clearCart());
@@ -144,14 +140,14 @@ public class SatısEkranıUser extends JFrame {
         button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         button.setFocusPainted(false);
         
-        // Hover effect
+        // butonun üstüne gelince renk değişimi
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(hoverColor);
             }
 
-            @Override
+            @Override//bu çalışacak
             public void mouseExited(MouseEvent e) {
                 button.setBackground(defaultColor);
             }

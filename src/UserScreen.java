@@ -49,6 +49,8 @@ public class UserScreen {
         frmEnvosale.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frmEnvosale.getContentPane().setLayout(new BorderLayout());
 
+        frmEnvosale.getContentPane().setBackground(Color.WHITE);
+
         JMenuBar menuBar = new JMenuBar();
         frmEnvosale.setJMenuBar(menuBar);
 
@@ -56,11 +58,10 @@ public class UserScreen {
         userMenu.setFont(new Font("Roboto", Font.BOLD, 14));
         menuBar.add(userMenu);
 
-        // Top Panel with updated style
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         topPanel.setPreferredSize(new Dimension(800, 100));
-        topPanel.setBackground(new Color(0, 51, 102)); // Dark Blue
+        topPanel.setBackground(new Color(10, 51, 102)); // Dark Blue
         frmEnvosale.getContentPane().add(topPanel, BorderLayout.NORTH);
 
         JLabel lblWelcome = new JLabel();
@@ -71,14 +72,14 @@ public class UserScreen {
         lblWelcome.setText(getWelcomeText());
         topPanel.add(lblWelcome, BorderLayout.WEST);
 
-        // Side menu panel using GroupLayout
+   
         JPanel sideMenu = new JPanel();
-        sideMenu.setBackground(new Color(255, 255, 255)); // White background
+        sideMenu.setBackground(new Color(255, 255, 255)); 
         GroupLayout sideMenuLayout = new GroupLayout(sideMenu);
         sideMenu.setLayout(sideMenuLayout);
 
-        JButton btnMakeSale = createStyledButton("Satış Yap", new Color(173, 216, 230), e -> showMakeSale());
-        JButton btnCreateInvoice = createStyledButton("Fatura Oluştur", new Color(204, 204, 153), e -> showCreateInvoice());
+        JButton btnMakeSale = createStyledButton("Satış Yap", new Color(168, 206, 130), e -> showMakeSale());
+        JButton btnCreateInvoice = createStyledButton("Fatura Oluştur", new Color(240, 204, 180), e -> showCreateInvoice());
         JButton btnProfile = createStyledButton("Profil", new Color(255, 204, 204), e -> showProfilePage());
         JButton btnExit = createStyledButton("Çıkış Yap", new Color(255, 255, 204), e -> logout());
 
@@ -102,32 +103,32 @@ public class UserScreen {
                 .addComponent(btnExit)
         );
 
-        sideMenu.setPreferredSize(new Dimension(200, 600));  // Set a fixed width for the side menu
+        sideMenu.setPreferredSize(new Dimension(200, 400));  // Set a fixed width for the side menu
         frmEnvosale.getContentPane().add(sideMenu, BorderLayout.WEST);
 
-        // Main content area for opened pages (Satış, Fatura, Profil, etc.)
         mainPanel = new JPanel();
         cardLayout = new CardLayout();
         mainPanel.setLayout(cardLayout);
 
-        // Initialize pages and add to mainPanel
+ 
         profilPage = new JPanel();
-        profilPage.setBackground(Color.WHITE); // Set a default background color for the profile page
+        profilPage.setBackground(Color.WHITE); 
         mainPanel.add(profilPage, "Profile");
 
-        // Add mainPanel (with pages) to the center of the frame
         frmEnvosale.getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-        // Set background image (centered)
+
         JLabel lblNewLabel = new JLabel();
-        lblNewLabel.setBounds(80, 80, 200, 368);
-        ImageIcon icon = new ImageIcon("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png"); // Path to your image
+        ImageIcon icon = new ImageIcon("C:/Users/crnck/eclipse-workspace/GUI.oop/GUI.oop/src/images/invoices.png");
         lblNewLabel.setIcon(icon);
 
-        // Center the image using a layout manager (using BorderLayout for simplicity)
-        JPanel imagePanel = new JPanel(new BorderLayout());
-        imagePanel.add(lblNewLabel, BorderLayout.CENTER);
-        frmEnvosale.getContentPane().add(imagePanel, BorderLayout.CENTER);
+        // Create a panel for the bottom and add the image there
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setBackground(Color.WHITE); // Ensure it has a white background
+        bottomPanel.add(lblNewLabel, BorderLayout.WEST);
+
+        // Add the bottom panel to the bottom of the frame
+        frmEnvosale.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private JButton createStyledButton(String text, Color bgColor, ActionListener listener) {
